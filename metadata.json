@@ -1,0 +1,6 @@
+{
+  "name": "ICAI BoS Material Link Scraper",
+  "description": "Automated discovery, direct link extraction, and management engine for ICAI BoS Study Materials, Revision Test Papers (RTPs), and Mock Test Papers (MTPs) across Foundation, Intermediate, and Final courses.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

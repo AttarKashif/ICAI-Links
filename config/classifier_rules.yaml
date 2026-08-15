@@ -1,0 +1,98 @@
+version: "1.4.0"
+last_updated: "2026-08-15"
+description: "Multi-signal classifier rule set for ICAI BoS educational links and resources across Foundation, Intermediate, and Final"
+
+weights:
+  url_pattern: 0.30
+  heading_context: 0.25
+  link_text: 0.20
+  page_hierarchy: 0.15
+  filename_pattern: 0.10
+
+courses:
+  Foundation:
+    url_keywords: ["foundation", "c=foundation", "/foundation/"]
+    heading_keywords: ["foundation course", "ca foundation", "foundation level", "paper 1 foundation", "paper 2 foundation", "paper 3 foundation", "paper 4 foundation"]
+  Intermediate:
+    url_keywords: ["intermediate", "c=intermediate", "c=ipce", "/intermediate/"]
+    heading_keywords: ["intermediate course", "ca intermediate", "group i", "group ii", "ipcc", "intermediate level"]
+  Final:
+    url_keywords: ["final", "c=final", "/final/"]
+    heading_keywords: ["final course", "ca final", "final level", "final group i", "final group ii"]
+
+groups:
+  "Group I":
+    url_keywords: ["g=1", "group1", "group-1", "group_1", "group_i", "/group1/"]
+    heading_keywords: ["group i", "group-1", "group 1", "first group", "group 1:"]
+  "Group II":
+    url_keywords: ["g=2", "group2", "group-2", "group_2", "group_ii", "/group2/"]
+    heading_keywords: ["group ii", "group-2", "group 2", "second group", "group 2:"]
+
+material_types:
+  "Study Material":
+    patterns: ["study_material", "study-material", "sm_", "module", "study_mat", "studymaterial"]
+    text_keywords: ["study material", "module", "initial pages", "chapter", "volume", "study text"]
+  "Revision Test Papers (RTP)":
+    patterns: ["rtp", "revision_test_paper", "revision-test", "revisiontest"]
+    text_keywords: ["revision test paper", "rtp", "revision test"]
+  "Mock Test Papers (MTP)":
+    patterns: ["mtp", "mock_test_paper", "mock-test", "mocktest"]
+    text_keywords: ["mock test paper", "mtp", "series 1", "series 2", "mock test"]
+  "Suggested Answers":
+    patterns: ["suggested_answers", "suggested-answers", "sugg_ans", "solutions"]
+    text_keywords: ["suggested answers", "suggested answer", "examiners report"]
+  "Case Study Booklets":
+    patterns: ["case_scenario", "case-study", "mcq_booklet", "cases", "case_study"]
+    text_keywords: ["case study", "multiple choice", "case scenario booklet", "mcq booklet", "case scenario"]
+  "Supplementary Material":
+    patterns: ["supplementary", "statutory_update", "corrigendum", "amendments"]
+    text_keywords: ["supplementary", "statutory update", "amendment", "corrigendum"]
+
+# Subject matchers ordered from most specific to general
+subjects:
+  # Final Group II
+  "Integrated Business Solutions":
+    keywords: ["integrated business solutions", "multi-disciplinary case study", "ibs module", "integrated_business", "paper 6: integrated business solutions", "/ibs/"]
+  "Indirect Tax Laws":
+    keywords: ["indirect tax laws", "customs law", "gst final", "idt final", "foreign trade policy", "indirect_tax", "paper 5: indirect tax", "/idt/"]
+  "Direct Tax Laws & International Taxation":
+    keywords: ["direct tax laws & international taxation", "direct tax laws", "international taxation", "dt final", "transfer pricing", "direct_tax", "paper 4: direct tax", "/dt/"]
+
+  # Final Group I
+  "Advanced Auditing, Assurance and Professional Ethics":
+    keywords: ["advanced auditing, assurance", "advanced auditing", "assurance and professional ethics", "audit final", "quality control", "paper 3: advanced auditing", "/audit/"]
+  "Advanced Financial Management":
+    keywords: ["advanced financial management", "afm module", "security analysis", "portfolio management", "afm_module", "paper 2: advanced financial management", "/afm/"]
+  "Financial Reporting":
+    keywords: ["financial reporting", "ind as", "fr module", "financial_reporting", "paper 1: financial reporting", "paper-1 final fr", "/fr/"]
+
+  # Intermediate Group II
+  "Cost and Management Accounting":
+    keywords: ["cost and management accounting", "costing", "cost module", "management accounting", "cost_module", "paper 4: cost and management accounting", "paper-4 costing", "/costing/"]
+  "Auditing and Ethics":
+    keywords: ["auditing and ethics", "standards on auditing", "auditing and assurance", "audit module", "audit_module", "paper 5: auditing and ethics", "paper-5 auditing"]
+  "Financial Management & Strategic Management":
+    keywords: ["financial management & strategic management", "financial management", "strategic management", "fm-sm", "fmsm", "fm_module", "sm_module", "paper 6: financial management", "paper-6 fm", "/fmsm/"]
+
+  # Intermediate Group I
+  "Advanced Accounting":
+    keywords: ["advanced accounting", "adv accounts", "adv_accounts", "accounting standards", "paper 1: advanced accounting", "paper-1 advanced accounting", "adv_accounting", "/accounts/"]
+  "Corporate and Other Laws":
+    keywords: ["corporate and other laws", "corporate law", "company law", "other laws", "companies act", "fema", "paper 2: corporate and other laws", "paper-2 corporate", "/law/"]
+  "Taxation":
+    keywords: ["taxation", "income tax", "gst", "goods and services tax", "income_tax", "paper 3: taxation", "paper-3 taxation", "/taxation/"]
+
+  # Foundation Subjects
+  "Quantitative Aptitude":
+    keywords: ["quantitative aptitude", "business mathematics", "logical reasoning", "statistics", "maths", "paper 3: quantitative aptitude", "paper-3 quantitative", "paper3_qa"]
+  "Business Economics":
+    keywords: ["business economics", "micro economics", "macro economics", "indian economy", "commercial knowledge", "paper 4: business economics", "paper-4 business economics", "paper4_economics"]
+  "Business Laws":
+    keywords: ["business laws", "indian regulatory framework", "the indian contract act", "sale of goods act", "partnership act", "paper 2: business laws", "paper-2 business laws", "paper2_business_laws"]
+  "Accounting":
+    keywords: ["accounting module", "paper 1: accounting", "paper-1 accounting", "principles and practice of accounting", "foundation accounting", "accounting 2026", "accounting may2026", "paper1_accounting"]
+
+edition_patterns:
+  - "(?:applicable for )?(?:may|nov|november|dec|december)?[\\s\\-_]*(202[4-8])"
+  - "edition[\\s:]*(?:october|november|december|january|may|june|july)?\\s*(202[4-8])"
+  - "(?:module|volume)[\\s\\-_]*[1-4][\\s\\-_]*(202[4-8])"

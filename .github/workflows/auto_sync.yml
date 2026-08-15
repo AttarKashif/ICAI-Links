@@ -1,0 +1,23 @@
+name: Automated BoS Sync
+
+on:
+  schedule:
+    - cron: '0 3 * * *' # Daily at 3:00 AM UTC
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Scraper Webhook
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+        run: |
+          if [ -z "$APP_URL" ]; then
+            echo "Error: APP_URL secret is not set in GitHub repository settings. Please add your deployed app URL as an APP_URL secret."
+            exit 1
+          fi
+          echo "Triggering BoS background sync at $APP_URL..."
+          curl -X POST "$APP_URL/api/scraper/run" \
+            -H "Content-Type: application/json" \
+            -d '{"scopeDescription": "GitHub Actions Scheduled Sync"}'
