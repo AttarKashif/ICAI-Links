@@ -5,10 +5,16 @@ on:
     - cron: '0 3 * * *' # Daily at 3:00 AM UTC
   workflow_dispatch: # Allows manual trigger from GitHub Actions tab
 
+permissions:
+  contents: write
+
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Trigger Scraper Webhook
         env:
           APP_URL: ${{ secrets.APP_URL }}
@@ -17,7 +23,39 @@ jobs:
             echo "Error: APP_URL secret is not set in GitHub repository settings. Please add your deployed app URL as an APP_URL secret."
             exit 1
           fi
-          echo "Triggering BoS background sync at $APP_URL..."
+          
+          echo "Triggering BoS Hierarchy Sync at $APP_URL..."
+          curl -X POST "$APP_URL/api/scraper/hierarchy/extract" \
+            -H "Content-Type: application/json" \
+            -d '{"batchSize": 10, "crawlDelayMs": 50}'
+
+          echo "Triggering Deep Material Validation Sync..."
           curl -X POST "$APP_URL/api/scraper/run" \
             -H "Content-Type: application/json" \
             -d '{"scopeDescription": "GitHub Actions Scheduled Sync"}'
+          
+          # Brief delay to ensure server state is ready for export
+          sleep 5
+
+      - name: Fetch Latest Export JSONs
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+        run: |
+          mkdir -p data
+          echo "Fetching latest data exports from $APP_URL..."
+          curl -L "$APP_URL/api/scraper/export?format=json" -o data/icai_resources.json
+          curl -L "$APP_URL/api/scraper/export?format=chapters_json" -o data/icai_chapter_links.json
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Only commit if the files have changed
+          git add data/icai_resources.json data/icai_chapter_links.json
+          if git diff --staged --quiet; then
+            echo "No changes in data exports, skipping commit."
+          else
+            git commit -m "chore: automated update of resource catalogs"
+            git push
+          fi

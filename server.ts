@@ -476,11 +476,37 @@ async function startServer() {
         return res.send(csvContent);
       }
 
+      const chapters = linkStateManager.getAllLinks()
+        .sort((a, b) => {
+          const courseOrder = { Foundation: 1, Intermediate: 2, Final: 3, Other: 4 };
+          const cDiff = (courseOrder[a.course as any] || 99) - (courseOrder[b.course as any] || 99);
+          if (cDiff !== 0) return cDiff;
+          if (a.paper_number !== b.paper_number) return a.paper_number - b.paper_number;
+          if (a.module_number !== b.module_number) return a.module_number - b.module_number;
+          return a.chapter_number - b.chapter_number;
+        });
+
+      if (req.query.format === 'chapters_json') {
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Content-Disposition', 'attachment; filename="icai_chapter_links.json"');
+        return res.json(chapters);
+      }
+
+      const hierarchy = hierarchyScraper.generateFullCourseHierarchy();
+      // Enhanced JSON export including hierarchy for full repository state backup
+      const rtps = MASTER_ICAI_RTP_MAP;
+      const mtps = MASTER_ICAI_MTP_MAP;
+
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Content-Disposition', 'attachment; filename="icai_materials_catalog.json"');
       res.json({
         exported_at: new Date().toISOString(),
         total_records: materials.length,
+        total_chapters: chapters.length,
+        hierarchy,
+        chapters,
+        rtps,
+        mtps,
         materials
       });
     } catch (err: any) {
